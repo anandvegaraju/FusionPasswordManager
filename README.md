@@ -1,7 +1,7 @@
 # FusionPasswordManager
 A convenient and simple tool that allows you to update passwords of several user accounts in one go
 
-Steps
+# Steps
 
 1.  Download the executable from here -> https://drive.google.com/file/d/1FcG8SbdSgXWiszP3QXv37bDKF3Dek79b/view?usp=sharing
 2.  Open the exe. Enter your instance URL, Username, password.
@@ -11,7 +11,8 @@ Steps
 5.  Wait for the application to process the file, update the passwords and display the response.
 
 
-Steps to ensure you have the right roles and privileges
+
+# Steps to ensure you have the right roles and privileges
 
 From Navigator->Tools->Security Console->search for the seeded Human Capital Management or HCM Integration Specialist Job Role and
 
