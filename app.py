@@ -59,7 +59,7 @@ class Ui_Main(object):
     def updatePasswords(self):
         self.progressBar.setProperty("value", 0)
         filename,_ = QFileDialog.getOpenFileName(None, 'Open File', '', ".xls(*.xls *.xlsx)")
-        try:
+        if 1==1:
             if filename is not None or len(filename)>=0:
                 self.textBrowser.setText('Reading the file - ' + filename)
                 self.progressBar.setProperty("value", 20)
@@ -88,19 +88,20 @@ class Ui_Main(object):
                     up = dict()
                     self.progressBar.setProperty("value", 50)
                     for i in range(len(data)):
-                        up[str(data[i][0])] = str(data[i][1])
+                        up[str(data[i][0]).lower()] = str(data[i][1])
                     dt = ''
                     self.progressBar.setProperty("value", 60)
+                    print(up)
                     if urLen > 1:
                         for i in range(urLen):
                             if i == urLen-1:
-                                dt = dt + ',{\"method\": \"PATCH\",\"path\": \"/Users/'+ userResults['Resources'][i]['id'] +'\",\"bulkId\": \"clientBulkId1\",\"data\": {\"schemas\": [\"urn:scim:schemas:core:2.0:User\"],\"active\": true,\"password\": \"' + up[userResults['Resources'][i]['userName']] + '\"}}]}'
+                                dt = dt + ',{\"method\": \"PATCH\",\"path\": \"/Users/'+ userResults['Resources'][i]['id'] +'\",\"bulkId\": \"clientBulkId1\",\"data\": {\"schemas\": [\"urn:scim:schemas:core:2.0:User\"],\"active\": true,\"password\": \"' + up[userResults['Resources'][i]['userName'].lower()] + '\"}}]}'
                             elif i == 0:
-                                dt = dt + '{\"Operations\": [{\"method\": \"PATCH\",\"path\": \"/Users/'+ userResults['Resources'][i]['id'] +'\",\"bulkId\": \"clientBulkId1\",\"data\": {\"schemas\": [\"urn:scim:schemas:core:2.0:User\"],\"active\": true,\"password\": \"' + up[userResults['Resources'][i]['userName']] + '\"}}'
+                                dt = dt + '{\"Operations\": [{\"method\": \"PATCH\",\"path\": \"/Users/'+ userResults['Resources'][i]['id'] +'\",\"bulkId\": \"clientBulkId1\",\"data\": {\"schemas\": [\"urn:scim:schemas:core:2.0:User\"],\"active\": true,\"password\": \"' + up[userResults['Resources'][i]['userName'].lower()] + '\"}}'
                             else:
-                                dt = dt + ',{\"method\": \"PATCH\",\"path\": \"/Users/'+ userResults['Resources'][i]['id'] +'\",\"bulkId\": \"clientBulkId1\",\"data\": {\"schemas\": [\"urn:scim:schemas:core:2.0:User\"],\"active\": true,\"password\": \"' + up[userResults['Resources'][i]['userName']] + '\"}}'
+                                dt = dt + ',{\"method\": \"PATCH\",\"path\": \"/Users/'+ userResults['Resources'][i]['id'] +'\",\"bulkId\": \"clientBulkId1\",\"data\": {\"schemas\": [\"urn:scim:schemas:core:2.0:User\"],\"active\": true,\"password\": \"' + up[userResults['Resources'][i]['userName'].lower()] + '\"}}'
                     elif urLen == 1:
-                        dt = dt + '{\"Operations\": [{\"method\": \"PATCH\",\"path\": \"/Users/'+ userResults['Resources'][0]['id'] +'\",\"bulkId\": \"clientBulkId1\",\"data\": {\"schemas\": [\"urn:scim:schemas:core:2.0:User\"],\"active\": true,\"password\": \"' + up[userResults['Resources'][i]['userName']] + '\"}}]}'
+                        dt = dt + '{\"Operations\": [{\"method\": \"PATCH\",\"path\": \"/Users/'+ userResults['Resources'][0]['id'] +'\",\"bulkId\": \"clientBulkId1\",\"data\": {\"schemas\": [\"urn:scim:schemas:core:2.0:User\"],\"active\": true,\"password\": \"' + up[userResults['Resources'][i]['userName'].lower()] + '\"}}]}'
 
                     
                     self.textBrowser.setText('Updating passwords. This could take a moment. Please wait even if the title bar reads "Not Responding"')
@@ -109,6 +110,7 @@ class Ui_Main(object):
                     payload = dt
                     headers = {'content-type': 'application/json' }
                     r = requests.post(url3, auth=HTTPBasicAuth(username, password), headers=headers, data=payload)
+                    print(r.status_code)
                     if r.status_code == 200:
                         self.progressBar.setProperty("value", 100)
                         finaltext = ''
@@ -124,17 +126,17 @@ class Ui_Main(object):
                     elif r.status_code == 403:
                         self.textBrowser.setText('Insufficient privileges. Please ensure your user account has REST access (Workers, User accounts) and IT Security Manager privileges')
                     else:
-                        self.textBrowser.setText('Unexpected error. This could due to your firewall or antivirus restricting network access to the application, the excel sheet, insufficient privileges, instance availability, etc. Please check your network status, excel, instance details and try again.')
+                        self.textBrowser.setText('Unexpected1 error. This could due to your firewall or antivirus restricting network access to the application, the excel sheet, insufficient privileges, instance availability, etc. Please check your network status, excel, instance details and try again.')
                 elif response.status_code == 401:
                     self.textBrowser.setText('Authorization failed. Please validate the instance URL, Username and password (Basic Auth)')
                 elif response.status_code == 403:
                     self.textBrowser.setText('Insufficient privileges. Please ensure your user account has REST access (Workers, User accounts) and IT Security Manager privileges')
                 else:
-                    self.textBrowser.setText('Unexpected error. This could due to incorrect URL format, your firewall or antivirus restricting network access to the application, the excel sheet, insufficient privileges, instance availability, etc. Please check your network status, excel, instance details and try again.')
+                    self.textBrowser.setText('Unexpected2 error. This could due to incorrect URL format, your firewall or antivirus restricting network access to the application, the excel sheet, insufficient privileges, instance availability, etc. Please check your network status, excel, instance details and try again.')
 
             else:
                 self.textBrowser.setText('Please select a valid xlsx file containing 2 columns - UserName and Password only')
-        except:
+        else:
             self.textBrowser.setText('Unexpected error. This could due to your firewall or antivirus restricting network access to the application, the excel sheet, insufficient privileges, instance availability, etc. Please check your network status, excel, instance details and try again.')
 
     def retranslateUi(self, Main):
